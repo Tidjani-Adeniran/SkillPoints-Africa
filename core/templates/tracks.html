@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section isolated-page-section" id="skills-section">
+  <div class="section-header">
+    <h2>Active Skill Tracks</h2>
+    <p>Earn verified credentials and build your portfolio while securing daily sustenance.</p>
+  </div>
+
+  <div class="cards-grid">
+    {% for track in tracks %}
+      <div class="item-card course-card">
+        <span class="card-tag tag-{{ track.category }}">{{ track.get_category_display }}</span>
+        <h3>{{ track.title }}</h3>
+        <p>{{ track.description }}</p>
+        <div class="card-meta">
+          <span><i class="fa-solid fa-award"></i> +{{ track.points_awarded }} SP</span>
+          <span class="difficulty">{{ track.difficulty }}</span>
+        </div>
+        
+        <a href="{% url 'enroll_in_track' track.id %}" class="full-width-link">
+          <button class="btn btn-card full-width-btn">Enroll in Track</button>
+        </a>
+      </div>
+    {% empty %}
+      <p>No learning tracks available in the database yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

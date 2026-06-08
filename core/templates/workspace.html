@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="isolated-page-section dashboard-wrap">
+  
+  <div class="dashboard-header" style="margin-bottom: 30px;">
+    <span class="card-tag tag-{{ enrollment.track.category }}">{{ enrollment.track.get_category_display }}</span>
+    <h1 style="margin-top: 10px;">{{ enrollment.track.title }} Workspace</h1>
+    <p style="color: #666; margin-top: 5px;">{{ enrollment.track.description }}</p>
+  </div>
+
+  <div class="data-table-container">
+    <h3 style="color: #2d3748; margin-bottom: 5px;"><i class="fa-solid fa-list-check"></i> Course Milestone Assignments</h3>
+    <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
+      Complete your tasks below. Submitting your assignment instantly verifies your milestones and awards skill points directly to your wallet dashboard balance.
+    </p>
+    
+    <div style="display: flex; flex-direction: column; gap: 25px;">
+      {% for task in tasks %}
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.01);">
+          
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+            <div>
+              <h4 style="color: #2d3748; margin: 0 0 5px 0; font-size: 1.15rem;">{{ task.title }}</h4>
+              <div style="color: #28a745; font-size: 13px; font-weight: bold;">
+                <i class="fa-solid fa-award"></i> Value: +{{ task.points_value }} SP
+              </div>
+            </div>
+            
+            <div>
+              {% if task.id in completed_tasks_list %}
+                <span style="background: #e6fffa; color: #319795; font-size: 12px; padding: 4px 12px; border-radius: 12px; font-weight: bold;">
+                  <i class="fa-solid fa-circle-check"></i> COMPLETED
+                </span>
+              {% else %}
+                <span style="background: #fffaf0; color: #dd6b20; font-size: 12px; padding: 4px 12px; border-radius: 12px; font-weight: bold;">
+                  <i class="fa-solid fa-clock"></i> PENDING
+                </span>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if task.learning_content %}
+            <div style="background: #f7fafc; border: 1px solid #edf2f7; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; line-height: 1.6; color: #4a5568; white-space: pre-line;">
+              <strong style="color: #2b6cb0;"><i class="fa-solid fa-book-open"></i> Lesson Content:</strong>
+              <p style="margin-top: 8px; margin-bottom: 0;">{{ task.learning_content }}</p>
+            </div>
+          {% endif %}
+
+          <p style="color: #2d3748; font-size: 14px; background: #fffaf0; padding: 15px; border-radius: 6px; border-left: 4px solid #dd6b20; margin-bottom: 20px; line-height: 1.5;">
+            <strong>Assignment Action Item:</strong> {{ task.description }}
+          </p>
+
+          {% if task.id in completed_tasks_list %}
+            <div style="background: #f0fff4; color: #276749; padding: 15px; border-radius: 6px; font-size: 14px; border: 1px solid #c6f6d5; line-height: 1.4;">
+              <strong>🎉 Point Milestone Unlocked:</strong> Your solution response has been successfully verified. Points are permanently active in your balance wallet ledger!
+            </div>
+          {% else %}
+            <form method="POST" action="{% url 'complete_workspace_task' task.id %}">
+              {% csrf_token %}
+              <textarea name="submission_text" placeholder="Type your task solution, assignment code answers, or project documentation notes here to claim your points..." required
+                        style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px; outline: none; margin-bottom: 12px; font-family: sans-serif; resize: vertical; box-sizing: border-box;"></textarea>
+              <button type="submit" class="btn btn-primary" style="background: #2b6cb0; border: none; padding: 12px 24px; font-size: 13px; border-radius: 4px; font-weight: bold; color: white; cursor: pointer;">
+                Submit Assignment & Claim Points
+              </button>
+            </form>
+          {% endif %}
+
+        </div>
+      {% empty %}
+        <div style="text-align: center; padding: 40px; border: 1px dashed #cbd5e0; border-radius: 8px; color: #718096;">
+          <i class="fa-solid fa-cubes" style="font-size: 2rem; margin-bottom: 10px;"></i>
+          <p style="margin: 0;">No milestone assignments have been assigned to this skill track yet via the admin dashboard panel.</p>
+        </div>
+      {% endfor %}
+    </div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+      <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px; text-decoration: none; background: #edf2f7; color: #4a5568; border-radius: 6px; font-weight: 500;">
+        <i class="fa-solid fa-arrow-left"></i> Return to Dashboard
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+# ==========================================================================
+# SKILLPOINTS AFRICA - LOCAL DEVELOPMENT GITIGNORE POLICY
+# ==========================================================================
+
+# 1. Local Database Storage File
+db.sqlite3
+
+# 2. Python Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# 3. Python Bytecode, Caching, and Pre-compiled Scripts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# 4. Local Deployment Environment Settings & Secrets
+.env
+.env.local
+
+# 5. Operating System Junk Files
+.DS_Store
+Thumbs.db

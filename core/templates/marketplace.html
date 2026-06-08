@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section isolated-page-section" id="rewards-section">
+  <div class="section-header">
+    <h2>Rewards Marketplace</h2>
+    <p>Redeem your hard-earned SkillPoints with our network of local micro-vendors and partners.</p>
+  </div>
+
+  {% if messages %}
+    <div class="landing-messages-wrapper">
+        {% for message in messages %}
+            <div class="landing-alert {% if message.tags == 'success' %}landing-alert-success{% else %}landing-alert-error{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="cards-grid">
+    {% for reward in rewards %}
+      <div class="item-card reward-card">
+        <div class="reward-icon-wrapper">
+          <i class="fa-solid {{ reward.icon_class }}"></i>
+        </div>
+        <h3>{{ reward.title }}</h3>
+        <p class="vendor-tag">Fulfilled by: {{ reward.vendor }}</p>
+        <div class="price-tag">{{ reward.points_cost }} SP</div>
+        <div class="stock-status">{{ reward.stock_status }}</div>
+        
+        {% if user.is_authenticated %}
+          <a href="{% url 'redeem_reward' reward.id %}" class="full-width-link">
+            <button class="btn btn-redeem full-width-btn">Redeem Voucher</button>
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="full-width-link">
+            <button class="btn btn-redeem btn-disabled-guest">Login to Redeem</button>
+          </a>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p>No marketplace items available in the database yet.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
