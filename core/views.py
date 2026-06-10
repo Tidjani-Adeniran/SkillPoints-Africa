@@ -23,6 +23,13 @@ def all_rewards(request):
     return render(request, 'marketplace.html', {'rewards': rewards})
 
 
+# About Us Page
+
+def about_page(request):
+    """Renders the SkillPoints Africa mission and vision overview page."""
+    return render(request, 'about.html')
+
+
 # ==========================================================================
 # AUTHENTICATION EXTENSION VIEW
 # ==========================================================================
