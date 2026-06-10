@@ -37,6 +37,7 @@
         
         <a href="{% url 'all_tracks' %}">Skills Track</a>
         <a href="{% url 'all_marketplace' %}">Marketplace</a>
+        <a href="{% url 'about' %}">About</a>
         
         {% if user.is_authenticated %}
           <a href="{% url 'dashboard' %}" class="dashboard-link-highlight"><strong>Dashboard</strong></a>
@@ -76,6 +77,7 @@
         
         <a href="{% url 'all_tracks' %}">Learning Tracks</a>
         <a href="{% url 'all_marketplace' %}">Vendor Partners</a>
+        <a href="{% url 'about' %}">About Us</a>
         <a href="#">Impact Ledger</a>
       </div>
 
