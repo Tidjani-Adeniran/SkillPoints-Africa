@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('about/', views.about_page, name='about'),
     path('login/', SuccessMessageLoginView.as_view(template_name='accounts/login.html'), name='login'),
     path('enroll/<int:track_id>/', views.enroll_in_track, name='enroll_in_track'),
     
