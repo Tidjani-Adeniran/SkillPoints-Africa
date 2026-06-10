@@ -661,3 +661,172 @@ form div input[type="text"]:focus {
   border-color: #2b6cb0 !important;
   box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
 }
+
+/* ==========================================================================
+   SkillPoints Africa - About Page & Global Card Micro-Interactions
+   ========================================================================== */
+
+/* --- 1. Global Core Transition Base Config --- */
+.step-card, .item-card {
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), 
+                border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.step-icon i {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                color 0.3s ease;
+}
+
+/* --- 2. Premium Hover Effects for Step Cards (The Loop & Solution) --- */
+.step-card:hover {
+    transform: translateY(-6px); /* Smooth isometric lift */
+    border-color: #2b6cb0; /* Changes border to branding blue */
+    box-shadow: 0 12px 24px rgba(43, 108, 176, 0.08), 
+                0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+/* Give the icons a clean pop dynamic on card hover */
+.step-card:hover .step-icon i {
+    transform: scale(1.15) rotate(5deg);
+    color: #2b6cb0;
+}
+
+/* --- 3. Premium Hover Effects for Item Cards (Vision & Founder) --- */
+.item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+    border-color: #cbd5e0;
+}
+
+/* Rotate the vision eye or list stars subtly when hovering item cards */
+.item-card:hover h3 i {
+    transform: scale(1.1) rotate(-3deg);
+    color: #319795; /* Accent teal pop */
+}
+
+/* --- 4. Content Typography & Unification Layouts --- */
+#vision-value .item-card,
+#founder-profile .item-card {
+    padding: 35px;
+    text-align: left;
+    border-radius: 8px;
+}
+
+/* Styling the dynamic value checklist clean */
+#vision-value .item-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0 0;
+}
+
+#vision-value .item-card li {
+    margin-bottom: 12px;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+#vision-value .item-card li i {
+    color: #319795; /* Checkmark accent teal */
+    margin-right: 12px;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+}
+
+#vision-value .item-card li:hover i {
+    transform: scale(1.25);
+}
+
+/* Profile specific layout decoration for Founder Badge */
+#founder-profile p strong {
+    display: inline-block;
+    color: #2b6cb0;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    background: #ebf8ff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* Line height readability enhancements */
+#vision-value p, #founder-profile p {
+    line-height: 1.75;
+    color: #4a5568;
+}
+
+#mission-problem .step-card p {
+    font-size: 0.98rem;          /* Slightly downscaled for an elegant, editorial feel */
+    line-height: 1.8;            /* Increased breathing room between lines for high readability */
+    color: #5a6578;              /* Soft slate-gray to remove harsh contrast and look modern */
+    letter-spacing: -0.1px;      /* Subtle tightening for clean presentation */
+    font-weight: 400;            /* Clean, balanced regular weight */
+    margin-top: 10px;
+}
+
+/* Target the H3 headers in those same cards to match the new rhythm */
+#mission-problem .step-card h3 {
+    font-size: 1.35rem;          /* Distinct, confident card header size */
+    font-weight: 700;            /* Bold structural anchoring */
+    color: #1a202c;              /* Deep obsidian dark tone for contrast */
+    letter-spacing: -0.3px;      /* Premium geometric tracking style */
+    margin-bottom: 8px;
+}
+
+#solution-framework .step-card p {
+    font-size: 0.96rem;          /* Clean, modern footprint for short execution text */
+    line-height: 1.75;           /* Perfect proportional balancing for action items */
+    color: #4e5a6b;              /* Premium steel-slate hue for action readability */
+    letter-spacing: -0.05px;     /* Smooth structural tracking */
+    font-weight: 400;
+    margin-top: 12px;
+}
+
+/* Target the H3 step titles to look balanced and cohesive */
+#solution-framework .step-card h3 {
+    font-size: 1.25rem;          /* Sized beautifully to not overwhelm the numbered prefixes */
+    font-weight: 700;            /* Authoritative header weight */
+    color: #111827;              /* Deep ink tone to ground the step header */
+    letter-spacing: -0.2px;      /* Professional compact letter layout */
+    margin-bottom: 6px;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    align-items: stretch; /* Makes all cards in a row match the tallest card */
+}
+
+/* Convert the card itself into a flexible column container */
+.step-card, .item-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns content from the top down */
+    height: 100%; /* Spans full height of the parent grid row */
+    box-sizing: border-box;
+}
+
+/* Fix the spacing around the icons so they have identical dimensions */
+.step-card .step-icon {
+    height: 50px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Keeps icons cleanly left-aligned */
+}
+
+/* Force headings to maintain a unified line block area */
+#mission-problem .step-card h3,
+#solution-framework .step-card h3 {
+    min-height: 2.5rem; /* Allocates identical vertical spacing for all card headers */
+    display: flex;
+    align-items: center; /* Vertically centers short titles inside that block */
+    margin-bottom: 10px;
+}
