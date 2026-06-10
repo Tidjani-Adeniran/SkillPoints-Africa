@@ -1,6 +1,8 @@
 # SkillPoints Africa 🚀
 
-SkillPoints Africa is a full-stack, Learn-to-Earn (L2E) Minimum Viable Product (MVP) built with Django. The platform is designed to bridge the skills gap by incentivizing human capital development across Africa. Users enroll in structured skill tracks, complete educational milestone assignments, earn digital skill points (SP) directly into their profile wallets, and redeem those points for valuable marketplace rewards and vouchers.
+SkillPoints Africa is a full-stack Learn-to-Earn (L2E) platform built with Django to incentivize skill development and empower African youth through education. The platform enables users to enroll in structured skill tracks, complete practical assignments, earn SkillPoints (SP) for verified progress, and redeem those points through a rewards marketplace. By connecting learning with tangible incentives, SkillPoints Africa aims to bridge the gap between education, employability, and economic opportunity across Africa.
+
+The current MVP includes user authentication, a personalized dashboard, skill enrollment, task management, a points-based reward system, and a marketplace redemption workflow. Future development will focus on integrating artificial intelligence (AI) to generate personalized learning pathways, recommend skill tracks, and automate task creation based on individual learner profiles and career goals.
 
 ---
 
