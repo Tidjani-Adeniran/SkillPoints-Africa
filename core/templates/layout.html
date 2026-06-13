@@ -8,6 +8,9 @@
   
   <link rel="stylesheet" href="{% static 'core/styles.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="icon" type="image/x-icon" href="{% static 'core/images/favicon.png' %}">
+
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -20,10 +23,11 @@
       {% endfor %}
     </div>
   {% endif %}
+  
   <nav class="navbar">
     <div class="logo">
       <a href="{% url 'home' %}" class="full-width-link color-inherit">
-        <span class="logo-accent">SkillPoints</span> Africa
+        <img src="{% static 'core/images/logo.png' %}" alt="SkillPoints Africa Logo" class="nav-logo">
       </a>
     </div>
 
@@ -34,7 +38,6 @@
     <div class="nav-container" id="nav-container">
       <div class="nav-links">
         <a href="{% url 'home' %}">Home</a>
-        
         <a href="{% url 'all_tracks' %}">Skills Track</a>
         <a href="{% url 'all_marketplace' %}">Marketplace</a>
         <a href="{% url 'about' %}">About</a>
@@ -74,7 +77,6 @@
       <div class="footer-section">
         <h4>Ecosystem</h4>
         <a href="{% url 'home' %}">Home</a>
-        
         <a href="{% url 'all_tracks' %}">Learning Tracks</a>
         <a href="{% url 'all_marketplace' %}">Vendor Partners</a>
         <a href="{% url 'about' %}">About Us</a>
@@ -104,3 +106,108 @@
   {% block extra_js %}{% endblock %}
 </body>
 </html>
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}SkillPoints Africa | Learn to Earn Platform{% endblock %}</title>
+  
+  <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          <i class="fa-solid fa-circle-check"></i> {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <nav class="navbar">
+    <div class="logo">
+      <a href="{% url 'home' %}" class="full-width-link color-inherit">
+        <span class="logo-accent">SkillPoints</span> Africa
+      </a>
+    </div>
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="nav-container" id="nav-container">
+      <div class="nav-links">
+        <a href="{% url 'home' %}">Home</a>
+        
+        <a href="{% url 'all_tracks' %}">Skills Track</a>
+        <a href="{% url 'all_marketplace' %}">Marketplace</a>
+        
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="dashboard-link-highlight"><strong>Dashboard</strong></a>
+        {% endif %}
+      </div>
+
+      <div class="auth-buttons">
+        {% if user.is_authenticated %}
+          <span class="navbar-wallet-display"><i class="fa-solid fa-wallet"></i> {{ user.profile.points_balance|default:0 }} SP</span>
+          
+          <form action="{% url 'logout' %}" method="post" class="inline-form">
+              {% csrf_token %}
+              <button type="submit" class="btn login">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}"><button class="btn login">Login</button></a>
+          <a href="{% url 'signup' %}"><button class="btn signup">Sign Up</button></a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+  {% endblock %}
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section brand-info">
+        <h3><span class="logo-accent">SkillPoints</span> Africa</h3>
+        <p>Transforming intentional skill acquisition into measurable survival equity for student demographics across West Africa.</p>
+        <p class="partner-statement"><small>In collaboration with decentralized regional micro-retail networks.</small></p>
+      </div>
+
+      <div class="footer-section">
+        <h4>Ecosystem</h4>
+        <a href="{% url 'home' %}">Home</a>
+        
+        <a href="{% url 'all_tracks' %}">Learning Tracks</a>
+        <a href="{% url 'all_marketplace' %}">Vendor Partners</a>
+        <a href="#">Impact Ledger</a>
+      </div>
+
+      <div class="footer-section">
+        <h4>Support</h4>
+        <a href="#">Vendor Verification</a>
+        <a href="#">Help Center</a>
+        <a href="#">Developer API</a>
+      </div>
+
+      <div class="footer-section">
+        <h4>Governance</h4>
+        <a href="#">Privacy Framework</a>
+        <a href="#">Terms of Redemption</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 SkillPoints Africa. Built for modern, mobile-first social impact.</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'core/script.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html> {% endcomment %}
