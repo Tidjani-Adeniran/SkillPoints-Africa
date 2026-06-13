@@ -71,6 +71,25 @@ def dashboard(request):
     active_enrollments = user.enrollments.filter(status__in=['DIAGNOSTIC', 'ACTIVE'])
     redeemed_rewards = Redemption.objects.filter(user=user).order_by('-date_redeemed')
     
+    # 🎯 DYNAMIC PROGRESS BAR CALCULATION ENGINE
+    # Pre-fetch all passed task IDs for this user to minimize database queries inside the loop
+    passed_task_ids = set(
+        TaskCompletion.objects.filter(user=user, status='PASSED').values_list('task_id', flat=True)
+    )
+    
+    for enrollment in active_enrollments:
+        # Count total tasks linked to this track
+        total_tasks = enrollment.track.tasks.count()
+        
+        if total_tasks > 0:
+            # Count how many tasks for this track exist within the user's passed set
+            completed_tasks_count = enrollment.track.tasks.filter(id__in=passed_task_ids).count()
+            # Calculate floor integer percentage
+            enrollment.progress_percentage = int((completed_tasks_count / total_tasks) * 100)
+        else:
+            # Safe boundary assignment if an admin created a track with no tasks yet
+            enrollment.progress_percentage = 0
+            
     context = {
         'points_balance': points_balance,
         'enrolled_count': enrolled_count,
