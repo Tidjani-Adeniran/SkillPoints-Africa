@@ -830,3 +830,16 @@ form div input[type="text"]:focus {
     align-items: center; /* Vertically centers short titles inside that block */
     margin-bottom: 10px;
 }
+
+
+.logo a {
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 190px;      /* Adjust this based on your navbar's height */
+    width: auto;       /* Prevents the logo from stretching out of proportion */
+    max-width: 180px;  /* Keeps things safe on smaller screens */
+    object-fit: contain;
+}
