@@ -6,10 +6,53 @@
 {% block content %}
 <div class="dashboard-wrap">
     
+    {% if user.is_staff %}
+    <div style="background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 8px; padding: 16px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <strong style="color: #4f46e5; font-size: 1rem;"><i class="fa-solid fa-user-shield"></i> Administrator Session Active</strong>
+            <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #4338ca;">You can review custom skills tracks and evaluate text assignments inside the admin interface.</p>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-primary" style="text-decoration: none; padding: 8px 16px; font-size: 0.85rem; background: #4f46e5; border-color: #4f46e5; font-weight: 600;">
+            Go To Operations Cockpit <i class="fa-solid fa-sliders" style="margin-left: 4px;"></i>
+        </a>
+    </div>
+    {% endif %}
+    
     <div class="dashboard-header">
         <h2>Welcome Back, {{ user.username }}! 👋</h2>
         <p style="color: #888888; margin-top: 5px;">Member Since: {{ user.date_joined|date:"F d, Y" }}</p>
     </div>
+
+    {% if active_enrollments %}
+        {% for enrollment in active_enrollments %}
+            {% for completion in enrollment.track.tasks.all %}
+                {% if completion.taskcompletion_set.all %}
+                    {% for sub in completion.taskcompletion_set.all %}
+                        {% if sub.user == user and sub.status == 'REJECTED' %}
+                        <div style="background: #fff7ed; border-left: 4px solid #ea580c; border-top: 1px solid #ffedd5; border-right: 1px solid #ffedd5; border-bottom: 1px solid #ffedd5; border-radius: 8px; padding: 16px; margin-top: 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <strong style="color: #c2410c; font-size: 0.95rem;">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> Action Needed: Revision Required for "{{ completion.title }}"
+                                    </strong>
+                                    <p style="margin: 4px 0 0 0; font-size: 0.85rem; color: #7c2d12;">
+                                        Track: <strong>{{ enrollment.track.title }}</strong>
+                                    </p>
+                                </div>
+                                <a href="{% url 'track_workspace' enrollment.id %}" class="btn" style="background: #ea580c; color: white; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; text-decoration: none; border-radius: 4px;">
+                                    Fix Submission <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                            </div>
+                            <div style="background: #ffffff; padding: 10px 12px; border: 1px dashed #fed7aa; border-radius: 6px; font-size: 0.85rem; color: #4a5568; font-style: italic;">
+                                <strong>Admin Feedback:</strong> "{{ sub.ai_feedback|default:"Please evaluate your structural framework parameters and re-submit." }}"
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
 
     <div class="dashboard-grid">
         <div class="stat-box points-box">

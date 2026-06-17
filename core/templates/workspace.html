@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block content %}
 <div class="isolated-page-section dashboard-wrap">
@@ -13,7 +14,7 @@
   <div class="data-table-container">
     <h3 style="color: #2d3748; margin-bottom: 5px;"><i class="fa-solid fa-list-check"></i> Course Milestone Assignments</h3>
     <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
-      Complete your tasks below. Submitting your assignment instantly verifies your milestones and awards skill points directly to your wallet dashboard balance.
+      Review the interactive text modules, inspect local operational examples, and complete assignments to verify credentials.
     </p>
     
     <div style="display: flex; flex-direction: column; gap: 25px;">
@@ -22,7 +23,7 @@
           
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
             <div>
-              <h4 style="color: #2d3748; margin: 0 0 5px 0; font-size: 1.15rem;">{{ task.title }}</h4>
+              <h4 style="color: #2d3748; margin: 0 0 5px 0; font-size: 1.15rem;">Task {{ task.order }}: {{ task.title }}</h4>
               <div style="color: #28a745; font-size: 13px; font-weight: bold;">
                 <i class="fa-solid fa-award"></i> Value: +{{ task.points_value }} SP
               </div>
@@ -30,26 +31,45 @@
             
             <div>
               {% if task.id in completed_tasks_list %}
-                <span style="background: #e6fffa; color: #319795; font-size: 12px; padding: 4px 12px; border-radius: 12px; font-weight: bold;">
-                  <i class="fa-solid fa-circle-check"></i> COMPLETED
+                <span style="background: #e6fffa; color: #319795; font-size: 12px; padding: 6px 14px; border-radius: 12px; font-weight: bold;">
+                  <i class="fa-solid fa-circle-check"></i> PASSED
                 </span>
               {% else %}
-                <span style="background: #fffaf0; color: #dd6b20; font-size: 12px; padding: 4px 12px; border-radius: 12px; font-weight: bold;">
-                  <i class="fa-solid fa-clock"></i> PENDING
-                </span>
+                {% with task_status=completion_status_map|get_item:task.id %}
+                  {% if task_status == 'PENDING' %}
+                    <span style="background: #eef2ff; color: #4f46e5; font-size: 12px; padding: 6px 14px; border-radius: 12px; font-weight: bold;">
+                      <i class="fa-solid fa-spinner fa-spin"></i> UNDER REVIEW
+                    </span>
+                  {% elif task_status == 'REJECTED' %}
+                    <span style="background: #fff5f5; color: #e53e3e; font-size: 12px; padding: 6px 14px; border-radius: 12px; font-weight: bold;">
+                      <i class="fa-solid fa-circle-xmark"></i> REJECTED / RETAKE
+                    </span>
+                  {% else %}
+                    <span style="font-size: 12px; padding: 6px 14px; border-radius: 12px; font-weight: bold; background: #fffaf0; color: #dd6b20;">
+                      <i class="fa-solid fa-clock"></i> OPEN / NO SUBMISSION
+                    </span>
+                  {% endif %}
+                {% endwith %}
               {% endif %}
             </div>
           </div>
 
           {% if task.learning_content %}
-            <div style="background: #f7fafc; border: 1px solid #edf2f7; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; line-height: 1.6; color: #4a5568; white-space: pre-line;">
-              <strong style="color: #2b6cb0;"><i class="fa-solid fa-book-open"></i> Lesson Content:</strong>
+            <div style="background: #f8fafc; border: 1px solid #edf2f7; padding: 18px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-line;">
+              <strong style="color: #2b6cb0; font-size: 0.95rem;"><i class="fa-solid fa-book-open"></i> Core Instructional Lesson:</strong>
               <p style="margin-top: 8px; margin-bottom: 0;">{{ task.learning_content }}</p>
             </div>
           {% endif %}
 
-          <p style="color: #2d3748; font-size: 14px; background: #fffaf0; padding: 15px; border-radius: 6px; border-left: 4px solid #dd6b20; margin-bottom: 20px; line-height: 1.5;">
-            <strong>Assignment Action Item:</strong> {{ task.description }}
+          {% if task.local_example %}
+            <div style="background: #f0fdf4; border: 1px solid #dcfce7; padding: 15px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; line-height: 1.5; color: #166534;">
+              <strong style="color: #15803d;"><i class="fa-solid fa-map-location-dot"></i> Practical African Market Context Study:</strong>
+              <p style="margin-top: 6px; margin-bottom: 0; font-style: italic;">{{ task.local_example }}</p>
+            </div>
+          {% endif %}
+
+          <p style="color: #1e293b; font-size: 14px; background: #fffaf0; padding: 15px; border-radius: 6px; border-left: 4px solid #dd6b20; margin-bottom: 20px; line-height: 1.5;">
+            <strong>Assignment Question Prompt:</strong> {{ task.description }}
           </p>
 
           {% if task.id in completed_tasks_list %}
@@ -57,14 +77,70 @@
               <strong>🎉 Point Milestone Unlocked:</strong> Your solution response has been successfully verified. Points are permanently active in your balance wallet ledger!
             </div>
           {% else %}
-            <form method="POST" action="{% url 'complete_workspace_task' task.id %}">
-              {% csrf_token %}
-              <textarea name="submission_text" placeholder="Type your task solution, assignment code answers, or project documentation notes here to claim your points..." required
-                        style="width: 100%; min-height: 120px; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px; outline: none; margin-bottom: 12px; font-family: sans-serif; resize: vertical; box-sizing: border-box;"></textarea>
-              <button type="submit" class="btn btn-primary" style="background: #2b6cb0; border: none; padding: 12px 24px; font-size: 13px; border-radius: 4px; font-weight: bold; color: white; cursor: pointer;">
-                Submit Assignment & Claim Points
-              </button>
-            </form>
+            {% with task_status=completion_status_map|get_item:task.id %}
+              
+              {% if task_status == 'PENDING' %}
+                <div style="background: #eef2ff; color: #3730a3; padding: 15px; border-radius: 6px; font-size: 14px; border: 1px solid #c7d2fe; line-height: 1.4;">
+                  <strong><i class="fa-solid fa-hourglass-half"></i> Assignment Under Review:</strong> Your response has been submitted to the operations cockpit. An administrator will evaluate your entry shortly to unlock your SkillPoints.
+                </div>
+              {% else %}
+                
+                {% if task_status == 'REJECTED' %}
+                  <div style="background: #fff7ed; color: #9a3412; padding: 18px; border-radius: 8px; font-size: 14px; border: 1px solid #ffedd5; border-left: 4px solid #ea580c; line-height: 1.5; margin-bottom: 20px;">
+                    <strong style="color: #c2410c; font-size: 0.95rem;">
+                      <i class="fa-solid fa-triangle-exclamation"></i> Revision Required for this Task
+                    </strong>
+                    
+                    {% if task.taskcompletion_set.all %}
+                      {% for completion in task.taskcompletion_set.all %}
+                        {% if completion.user == request.user and completion.status == 'REJECTED' %}
+                          <div style="background: #ffffff; padding: 12px; border: 1px dashed #fed7aa; border-radius: 6px; margin-top: 8px; color: #4a5568; font-style: italic; font-family: sans-serif;">
+                            <!-- 🎯 FIXED FIELD NAME & UPDATED FALLBACK MESSAGE HERE -->
+                            <strong>Reviewer Feedback:</strong> "{{ completion.admin_feedback|default:"Task rejected. Please review the requirements, update your work, and retake it below." }}"
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <p style="margin: 6px 0 0 0; color: #7c2d12;">Please read the lesson details carefully, refine your approach, and try again below.</p>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+                <form method="POST" action="{% url 'complete_workspace_task' task.id %}">
+                  {% csrf_token %}
+                  
+                  {% if task.assignment_type == 'multiple_choice' %}
+                    <div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
+                      {% for option in task.options %}
+                        <label style="display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 14px; color: #334155;">
+                          <input type="radio" name="quiz_choices" value="{{ option }}" required style="transform: scale(1.1); margin: 0;">
+                          {{ option }}
+                        </label>
+                      {% endfor %}
+                    </div>
+
+                  {% elif task.assignment_type == 'checkbox' %}
+                    <div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
+                      {% for option in task.options %}
+                        <label style="display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 14px; color: #334155;">
+                          <input type="checkbox" name="quiz_choices" value="{{ option }}" style="transform: scale(1.1); margin: 0;">
+                          {{ option }}
+                        </label>
+                      {% endfor %}
+                    </div>
+
+                  {% else %}
+                    <textarea name="submission_text" placeholder="Type your updated full project response or workflow planning notes here for review..." required
+                              style="width: 100%; min-height: 130px; padding: 12px; border: 2px solid #cbd5e0; border-radius: 6px; font-size: 14px; outline: none; margin-bottom: 12px; font-family: sans-serif; resize: vertical; box-sizing: border-box;">{% if task.taskcompletion_set.all %}{% for completion in task.taskcompletion_set.all %}{% if completion.user == request.user and completion.status == 'REJECTED' %}{{ completion.submission_text }}{% endif %}{% endfor %}{% endif %}</textarea>
+                  {% endif %}
+
+                  <button type="submit" class="btn btn-primary" style="background: #2b6cb0; border: none; padding: 12px 24px; font-size: 13px; border-radius: 4px; font-weight: bold; color: white; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Assignment Action
+                  </button>
+                </form>
+              {% endif %}
+
+            {% endwith %}
           {% endif %}
 
         </div>
@@ -77,11 +153,13 @@
     </div>
     
     <div style="margin-top: 30px; text-align: center;">
-      <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px; text-decoration: none; background: #edf2f7; color: #4a5568; border-radius: 6px; font-weight: 500;">
+      <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px; text-decoration: none; background: #edf2f7; color: #4a5568; border-radius: 6px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-arrow-left"></i> Return to Dashboard
       </a>
     </div>
   </div>
 
 </div>
+
+<script src="{% static 'script.js' %}"></script>
 {% endblock %}

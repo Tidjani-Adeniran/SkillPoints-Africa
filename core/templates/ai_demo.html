@@ -1,0 +1,129 @@
+{% extends 'layout.html' %}
+
+{% block title %}Advanced AI Sandbox | SkillPoints Africa{% endblock %}
+
+{% block content %}
+<div style="max-width: 950px; margin: 40px auto; padding: 0 20px; font-family: system-ui, sans-serif;">
+    
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px;">
+        <h2 style="color: #2d3748; margin-top: 0;"><i class="fa-solid fa-graduation-cap" style="color: #3182ce; margin-right: 10px;"></i> Advanced Curriculum Simulator</h2>
+        <p style="color: #4a5568; line-height: 1.5;">
+            Generate beautifully structured lesson lists. Tasks can be generated as traditional **text essays**, single-choice **radio inputs**, or multi-choice **checkbox structures**.
+        </p>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div style="padding: 12px 16px; border-radius: 6px; margin-bottom: 15px; font-weight: 500; font-size: 0.9rem;
+                    {% if message.tags == 'success' %} background: #f0fff4; color: #22543d; border: 1px solid #c6f6d5;
+                    {% else %} background: #fff5f5; color: #742a2a; border: 1px solid #fed7d7; {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" style="background: #f8fafc; border: 1px solid #edf2f7; border-radius: 8px; padding: 15px; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;">
+            {% csrf_token %}
+            <div style="flex: 2; min-width: 220px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: bold; color: #4a5568; margin-bottom: 6px;">Skill Blueprint Topic</label>
+                <input type="text" name="topic" value="Social Media Advertising Basics" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box;">
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+                <label style="display: block; font-size: 0.8rem; font-weight: bold; color: #4a5568; margin-bottom: 6px;">Difficulty Tier</label>
+                <select name="level" style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; background: white;">
+                    <option value="Beginner">Beginner Level</option>
+                    <option value="Intermediate">Intermediate Level</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" name="generate_task" style="background: #3182ce; color: white; border: none; padding: 11px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">Generate Track List</button>
+                {% if demo_batch %}
+                    <button type="submit" name="reset_demo" style="background: #e2e8f0; color: #4a5568; border: none; padding: 11px 15px; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    {% if demo_batch %}
+        <h2 style="color: #1a202c; margin-bottom: 20px; border-left: 5px solid #3182ce; padding-left: 12px;">Track: {{ demo_batch.track_title }}</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 30px; margin-bottom: 50px;">
+            {% for task in demo_batch.tasks %}
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #edf2f7; padding-bottom: 12px; margin-bottom: 15px;">
+                        <h3 style="margin: 0; color: #2d3748; font-size: 1.2rem;">Module #{{ forloop.counter }}: {{ task.title }}</h3>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <span style="background: #edf2f7; color: #4a5568; font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">Type: {{ task.assignment_type }}</span>
+                            <span style="background: #e6fffa; color: #234e52; font-weight: bold; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem;">💎 {{ task.points }} SP</span>
+                        </div>
+                    </div>
+
+                    <p style="color: #2d3748; line-height: 1.5; font-style: italic; margin-bottom: 15px;">{{ task.concept_summary }}</p>
+                    
+                    <h5 style="margin: 0 0 8px 0; color: #4a5568; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">📋 Key Learning Points:</h5>
+                    <ul style="margin: 0 0 20px 0; padding-left: 20px; color: #2d3748; line-height: 1.6;">
+                        {% for lesson in task.core_lessons %}
+                            <li style="margin-bottom: 4px;">{{ lesson }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <div style="background: #f7fafc; border-radius: 6px; padding: 12px 15px; font-size: 0.9rem; border-left: 3px solid #cbd5e0; margin-bottom: 20px; color: #4a5568;">
+                        <strong>💼 Practical Case Study Context:</strong> {{ task.local_example }}
+                    </div>
+
+                    {% if demo_evaluation and demo_evaluation.task_title == task.title %}
+                        <div style="padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid;
+                            {% if demo_evaluation.is_correct %} background: #f0fff4; color: #22543d; border-color: #c6f6d5; {% else %} background: #fff5f5; color: #742a2a; border-color: #fed7d7; {% endif %}">
+                            <strong>Evaluation Status: {% if demo_evaluation.is_correct %}PASSED ✅{% else %}REVISION REQUIRED ❌{% endif %}</strong>
+                            <p style="margin: 5px 0 0 0; font-size: 0.9rem; line-height: 1.4;">{{ demo_evaluation.feedback }}</p>
+                        </div>
+                    {% endif %}
+
+                    <form method="POST" style="border-top: 1px solid #edf2f7; padding-top: 15px;">
+                        {% csrf_token %}
+                        <input type="hidden" name="task_title" value="{{ task.title }}">
+                        <input type="hidden" name="task_type" value="{{ task.assignment_type }}">
+                        <input type="hidden" name="assignment_prompt" value="{{ task.assignment_instruction }}">
+                        
+                        <p style="font-weight: 600; color: #1a202c; margin-bottom: 12px;">📝 Question: {{ task.assignment_instruction }}</p>
+
+                        {% if task.assignment_type == 'text' %}
+                            <textarea name="student_answer" rows="3" placeholder="Type your response argument text portfolio description..." style="width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-family: inherit; box-sizing: border-box; margin-bottom: 12px;"></textarea>
+                        
+                        {% elif task.assignment_type == 'multiple_choice' %}
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+                                {% for option in task.options %}
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: #2d3748; cursor: pointer;">
+                                        <input type="radio" name="quiz_choices" value="{{ option }}" required> {{ option }}
+                                    </label>
+                                {% endfor %}
+                                {% for correct in task.correct_options %}
+                                    <input type="hidden" name="correct_choices" value="{{ correct }}">
+                                {% endfor %}
+                            </div>
+
+                        {% elif task.assignment_type == 'checkbox' %}
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+                                {% for option in task.options %}
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: #2d3748; cursor: pointer;">
+                                        <input type="checkbox" name="quiz_choices" value="{{ option }}"> {{ option }}
+                                    </label>
+                                {% endfor %}
+                                {% for correct in task.correct_options %}
+                                    <input type="hidden" name="correct_choices" value="{{ correct }}">
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <button type="submit" name="submit_answer" style="background: #2f855a; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer;">
+                            Submit Response
+                        </button>
+                    </form>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

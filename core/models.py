@@ -22,23 +22,48 @@ class SkillTrack(models.Model):
     
     
 class Task(models.Model):
+    """
+    Enhanced to support dynamic task assignments (text, quizzes, checkboxes).
+    Includes an approval toggle to hide AI drafts until the admin vets them.
+    """
+    ASSIGNMENT_TYPES = [
+        ('text', 'Manual Text Submission'),
+        ('multiple_choice', 'Multiple Choice (Single Option)'),
+        ('checkbox', 'Checkbox Selection (Multiple Options)'),
+    ]
+
     track = models.ForeignKey(SkillTrack, on_delete=models.CASCADE, related_name='tasks', null=True, blank=True)
     title = models.CharField(max_length=200)
-    learning_content = models.TextField(blank=True, null=True)  # 🚀 ADDED: Holds the AI-generated study material/lesson
-    description = models.TextField()                            # Holds the practical assignment/assessment prompt
+    learning_content = models.TextField(blank=True, null=True)  # Holds the AI-generated textbook/lesson text
+    concept_summary = models.TextField(blank=True, null=True)   # Short 1-2 sentence breakdown
+    local_example = models.TextField(blank=True, null=True)     # Regional/African business context case study
+    
+    # Structural changes for dynamic assessments
+    assignment_type = models.CharField(max_length=20, choices=ASSIGNMENT_TYPES, default='text')
+    description = models.TextField(help_text="Holds the practical assignment/assessment prompt question.") 
+    
+    # JSON arrays safely supported by SQLite/PostgreSQL
+    options = models.JSONField(default=list, blank=True, help_text="List of choices for quizzes. Leave empty for text.")
+    correct_options = models.JSONField(default=list, blank=True, help_text="Exact matching text choices that equal success.")
+    
     points_value = models.IntegerField(default=25) 
     order = models.IntegerField(default=1)         
+    is_approved = models.BooleanField(default=False)  # 🔥 Hidden from students until you click publish inside the admin workspace
 
     def __str__(self):
+        status = "Live" if self.is_approved else "Draft Blueprint"
         if self.track:
-            return f"[{self.track.title}] - {self.title} ({self.points_value} SP)"
-        return f"[Standalone AI Task] - {self.title} ({self.points_value} SP)"
+            return f"[{self.track.title}] - {self.title} ({status} - {self.points_value} SP)"
+        return f"[Standalone AI Task] - {self.title} ({status})"
 
 
 class TaskCompletion(models.Model):  
-    """Tracks assignment answers, AI grades, and feedback notes for try-again logic."""
+    """
+    Tracks answers, grades, and feedback notes. Updated to transition 
+    from 'AI Review' definitions to a pure 'Admin Vetting' architecture.
+    """
     GRADING_STATUS = [
-        ('PENDING', 'Under AI Review'),
+        ('PENDING', 'Under Admin Review'),  # For manual text submissions awaiting your click
         ('FAILED', 'Needs Revision (Try Again)'),
         ('PASSED', 'Passed (100% Competency)'),
     ]
@@ -46,12 +71,12 @@ class TaskCompletion(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='completed_tasks')
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     
-    # Assessment implementation fields
+    # Holds submitted string text, or string arrays for multiple choice selections
     submission_text = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=15, choices=GRADING_STATUS, default='PENDING')
-    ai_feedback = models.TextField(blank=True, null=True)
+    admin_feedback = models.TextField(blank=True, null=True)  # Personalized notes you leave for manual reviews
     
-    date_completed = models.DateTimeField(auto_now=True) # Automatically updates on every resubmission retry
+    date_completed = models.DateTimeField(auto_now=True) 
 
     class Meta:
         unique_together = ('user', 'task')

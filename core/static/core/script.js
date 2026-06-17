@@ -34,3 +34,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+
+// core/static/script.js
+document.addEventListener("DOMContentLoaded", function() {
+  
+  // 1. Identify if the user is actively waiting for an admin review
+  const hasPendingTasks = document.body.innerHTML.includes("Assignment Under Review") || 
+                          document.body.innerHTML.includes("UNDER REVIEW");
+
+  if (hasPendingTasks) {
+    console.log("Active review pending detected. Live status polling initialized...");
+    
+    // 2. Poll the server in the background every 4 seconds
+    const statusInterval = setInterval(function() {
+      
+      fetch(window.location.href, {
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Network response failure.');
+        return response.text();
+      })
+      .then(htmlString => {
+        const parser = new DOMParser();
+        const freshDoc = parser.parseFromString(htmlString, 'text/html');
+        
+        const stillPending = freshDoc.body.innerHTML.includes("Assignment Under Review") || 
+                             freshDoc.body.innerHTML.includes("UNDER REVIEW");
+
+        // 3. If it's no longer pending, auto-reload the workspace UI!
+        if (!stillPending) {
+          console.log("Status modification detected! Syncing workspace view...");
+          clearInterval(statusInterval);
+          window.location.reload();
+        }
+      })
+      .catch(err => console.warn('Background sync status polling paused:', err));
+      
+    }, 4000);
+  }
+});
