@@ -40,12 +40,12 @@ git clone [https://github.com/your-username/SkillPoints-Africa.git](https://gith
 cd SkillPoints-Africa
 
 ### 2. Isolate with a Virtual Environment
-```
-# On Windows
+```bash
+On Windows
 python -m venv venv
 venv\Scripts\activate
 
-# On macOS/Linux
+On macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 
