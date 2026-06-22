@@ -34,13 +34,14 @@ This repository is optimized for seamless collaboration across different develop
 
 Follow these step-by-step instructions to spin up the MVP workspace locally:
 
-### 1. Clone the Architecture Repository
+### Steps to follow
 ```bash
-git clone [https://github.com/your-username/SkillPoints-Africa.git](https://github.com/your-username/SkillPoints-Africa.git)
+1. Clone the repository
+git clone https://github.com/your-username/SkillPoints-Africa.git](https://github.com/your-username/SkillPoints-Africa.git)
 cd SkillPoints-Africa
 
-### 2. Isolate with a Virtual Environment
-```bash
+2. Isolate with a Virtual Environment
+
 On Windows
 python -m venv venv
 venv\Scripts\activate
@@ -49,11 +50,12 @@ On macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 
-### 3. Install Package Dependencies
+3. Install Package Dependencies
+
 pip install --upgrade pip
 pip install -r requirements.txt
 
-### 4. Configure Environment Variables
+4. Configure Environment Variables
 
 The application relies on secure environment parameters to process user data and run the generative tracking modules. 
 Create a file named `.env` in your root project directory (same folder as `manage.py`) and paste your keys:
@@ -62,13 +64,13 @@ DEBUG=True
 SECRET_KEY=your-django-super-secret-key
 GEMINI_API_KEY=your-google-gemini-api-access-token
 
-### 5.Run Database Migrations & Seed Setup
+5.Run Database Migrations & Seed Setup
 python manage.py migrate
 
-### 6.Create an Administrator Profile
+6.Create an Administrator Profile
 python manage.py createsuperuser
 
-### 7.Launch the Local Development Server
+7.Launch the Local Development Server
 python manage.py runserver
 Open your preferred web browser and navigate to http://127.0.0.1:8000/ to explore the student workspace. Access the management cockpit at http://127.0.0.1:8000/admin/
 
