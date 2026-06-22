@@ -1,75 +1,132 @@
 # SkillPoints Africa 🚀
 
-SkillPoints Africa is a full-stack Learn-to-Earn (L2E) platform built with Django to incentivize skill development and empower African youth through education. The platform enables users to enroll in structured skill tracks, complete practical assignments, earn SkillPoints (SP) for verified progress, and redeem those points through a rewards marketplace. By connecting learning with tangible incentives, SkillPoints Africa aims to bridge the gap between education, employability, and economic opportunity across Africa.
+SkillPoints Africa is an AI-powered, full-stack upskilling and resource-redemption platform designed to empower youth across the African tech startup ecosystem. By combining localized micro-learning modules with a gamified blockchain-inspired ledger system, the platform transforms educational milestones into real-world utility. 
 
-The current MVP includes user authentication, a personalized dashboard, skill enrollment, task management, a points-based reward system, and a marketplace redemption workflow. Future development will focus on integrating artificial intelligence (AI) to generate personalized learning pathways, recommend skill tracks, and automate task creation based on individual learner profiles and career goals.
+Students complete high-demand digital skills tracks, submit practical contextual workflows, and earn **SkillPoints (SP)** redeemable for data vouchers, vendor rewards, or operational tools.
 
 ---
 
-## 🏗️ System Architecture
+## ✨ Core Features
 
-The project utilizes a decoupled, multi-app Django architecture designed for modularity, clean separation of concerns, and ease of scaling:
+### 👨‍🎓 Student Ecosystem
+- **Interactive Workspace:** Tightly designed task interfaces offering structured instructional lessons mapped with *Practical African Market Context Studies*.
+- **Dynamic Portfolios:** Support for multiple-choice quizzes, validation checkboxes, and long-form narrative workflow assignment inputs.
+- **Wallet & Reward Ledger:** A secure tracking dashboard showing total point balances (`SP`), real-time completion percentages, and valid voucher access codes.
+
+### 🛠️ Operations Cockpit (Admin Interface)
+- **AI-Powered Track Generation:** Utilizes the cutting-edge `google-genai` SDK to dynamically create localized educational modules on demand.
+- **Evaluation Loop:** Comprehensive tracking panel for administrators to review active text submissions, deliver structured feedback, and release milestone tokens.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+- **Backend Framework:** Django (Python 3.10+)
+- **Database:** SQLite (Development) / PostgreSQL (Production ready)
+- **Frontend Architecture:** Clean HTML5 Semantics, Vanilla JavaScript ES6, and Modularized Native CSS Grid/Flexbox pipelines (`static/core/`)
+- **Third-Party Integrations:** Google GenAI SDK (`google-genai>=1.0.0`), FontAwesome v6 (Iconography)
+
+---
+
+## 🚀 Local Installation & Deployment Pipeline
+
+This repository is optimized for seamless collaboration across different development environments. All outdated platform-specific dependencies (such as `pywin32`) have been stripped to ensure flawless initialization.
+
+Follow these step-by-step instructions to spin up the MVP workspace locally:
+
+### 1. Clone the Architecture Repository
+```bash
+git clone [https://github.com/your-username/SkillPoints-Africa.git](https://github.com/your-username/SkillPoints-Africa.git)
+cd SkillPoints-Africa
+
+### 2. Isolate with a Virtual Environment
+# On Windows
+python -m venv venv
+venv\Scripts\activate
+
+# On macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+
+### 3. Install Package Dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+### 4. Configure Environment Variables
+
+The application relies on secure environment parameters to process user data and run the generative tracking modules. 
+Create a file named `.env` in your root project directory (same folder as `manage.py`) and paste your keys:
+```env
+DEBUG=True
+SECRET_KEY=your-django-super-secret-key
+GEMINI_API_KEY=your-google-gemini-api-access-token
+
+### 5.Run Database Migrations & Seed Setup
+python manage.py migrate
+
+### 6.Create an Administrator Profile
+python manage.py createsuperuser
+
+### 7.Launch the Local Development Server
+python manage.py runserver
+Open your preferred web browser and navigate to http://127.0.0.1:8000/ to explore the student workspace. Access the management cockpit at http://127.0.0.1:8000/admin/
+
+## 📂 Targeted File System Layout
+
+To ensure Django's template loaders and static engines register paths properly, the repository must match this clean modular structure. 
 
 ```text
-SkillPointsAfrica/ (Root)
+SkillPoint/                   # Git Repository Root Folder
 │
-├── core/            # Global Configuration: Master settings, WSGI/ASGI layout, and global routing (urls.py).
+├── accounts/                 # User Accounts, Authentication, Wallet Profile States
+│   ├── migrations/
+│   ├── templates/            # FIX: Plural name namespace configuration
+│   │   └── accounts/
+│   │       ├── login.html
+│   │       └── signup.html
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
 │
-├── accounts/        # Identity & Ledger: User authentication, registration, profiles, and wallet balances.
+├── core/                     # Learning Engines, Course Tracks, Submissions & Marketplace
+│   ├── migrations/
+│   ├── static/
+│   │   └── core/
+│   │       ├── accounts.css
+│   │       ├── script.js
+│   │       └── styles.css
+│   ├── templates/
+│   │   ├── about.html
+│   │   ├── admin_dashboard.html   # FIX: Ensured explicit .html extension
+│   │   ├── ai_demo.html
+│   │   ├── dashboard.html
+│   │   ├── home.html
+│   │   ├── layout.html
+│   │   ├── marketplace.html
+│   │   ├── tracks.html
+│   │   └── workspace.html
+│   ├── templatetags/         # FIX: Custom template tag registry (singular 'templatetags')
+│   │   ├── __init__.py
+│   │   └── custom_tags.py
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── urls.py
+│   └── views.py
 │
-└── SkillPoints/             # Core Core Engine: Learning tracks, milestone assignments, enrollments, and reward redemptions.
+├── SkillPoint/               # Central Project Management & Routing Configurations Only
+│   ├── __init__.py
+│   ├── settings.py           # Master Project Configuration 
+│   ├── urls.py               # Master Routing Gateway Matrix
+│   └── wsgi.py
+│
+├── .gitignore                # Security protocols blocking cache/secrets/local DBs
+├── manage.py                 # Django entrypoint script
+├── README.md                 # Documentation
+└── requirements.txt          # Frozen dependency manifest
 
-✨ Core Features
-👤 1. Advanced Authentication & Wallets (accounts)
-Custom user registration and login pipelines with success messaging.
-Automated provisioning of a digital User Wallet upon account registration.
-Real-time balance ledger tracking active Skill Points (SP).
 
-📚 2. Dynamic Course Workspace (skillPoints)
-  Admin-Driven Curriculum: Administrators can instantly add new Tracks and Milestone Tasks via the /admin dashboard panel without writing code.
-  Enrollment Engine: One-click registration for active tracks that securely hooks the user profile to the learning sequence.
-  Interactive Workspace: A responsive, live lab environment that dynamically loops through specific track assignments, displaying clear PENDING or COMPLETED visual milestones.
-
-💰 3. Automated Point Accrual & Redemption Loop
-  Instant Verification: Task submissions route through an optimized background workflow that flags assignments as passed and calculates point value metrics.
-  Wallet Hydration: Points are automatically injected into the student’s profile wallet ledger immediately upon task completion.
-  Marketplace Exchange: A built-in storefront where users can exchange accrued points for mock operational reward vouchers, modifying balances instantly.
-🛠️ Local Development & Installation Setup
-Because local database records (db.sqlite3) and dependencies (venv/) are excluded via the project .gitignore policy to secure local information, follow these steps to initialize the project from scratch:
-
-Prerequisites
-  Python 3.10 or higher installed on your local machine.
-  Git version control client.
-Step 1: Clone the Repository (
-
-git clone [https://github.com/Tidjani-Adeniran/SkillPoints-Africa.git](https://github.com/Tidjani-Adeniran/SkillPoints-Africa.git)
-cd SkillPoints-Africa
-code .
-
-# In the terminal of your code editor Enter these commands
-# Create the environment
-    python -m venv venv
-# Install the required architectural packages using the dependency mapping file
-    pip install -r requirements.txt
-#Execute Django migrations to inspect structural files and build your local database file system
-    python manage.py makemigrations
-    python manage.py migrate
-#Generate administrative login credentials to access the backend control panel layout
-    python manage.py createsuperuser
-#Launch the Development Server
-    python manage.py runserver
-
-Open your browser and navigate to http://127.0.0.1:8000/ to interact with the platform.
-Access http://127.0.0.1:8000/admin/ to manually seed initial tracks, milestones, and marketplace rewards.
-
-🔒 Security & Git Configuration
-This project enforces strict environment boundaries using a local .gitignore policy:
-
-db.sqlite3 is explicitly ignored to ensure local user testing data, credentials, and structural tokens never leak to public repositories.
-
-venv/ and all compiled __pycache__/ modules are ignored to ensure the cloud repository remains lightweight, optimized, and fast to download.
-
-🚀 Future Roadmap
-Phase 2: Advanced interactive UI components with responsive CSS Grid dashboard statistics card layouts.
-Phase 3: Integration of secure, automated code/text verification models to systematically audit deliverables before points distribution.
-Phase 4: Live integration with African micro-reward API services for automated digital voucher fulfillment.
