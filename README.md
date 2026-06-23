@@ -4,6 +4,7 @@ SkillPoints Africa is an AI-powered, full-stack upskilling and resource-redempti
 
 Students complete high-demand digital skills tracks, submit practical contextual workflows, and earn **SkillPoints (SP)** redeemable for data vouchers, vendor rewards, or operational tools.
 
+
 ---
 
 ## ✨ Core Features
