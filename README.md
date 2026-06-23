@@ -37,7 +37,7 @@ Follow these step-by-step instructions to spin up the MVP workspace locally:
 ### Steps to follow
 ```bash
 1. Clone the repository
-git clone https://github.com/your-username/SkillPoints-Africa.git](https://github.com/your-username/SkillPoints-Africa.git)
+git clone https://github.com/Tidjani-Adeniran/SkillPoints-Africa.git
 cd SkillPoints-Africa
 
 2. Isolate with a Virtual Environment
