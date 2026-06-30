@@ -65,6 +65,7 @@ GEMINI_API_KEY=your-google-gemini-api-access-token
 
 ### 5. Run Database Migrations & Seed Setup
 ```bash
+python manage.py makemigrations
 python manage.py migrate
 ```
 
