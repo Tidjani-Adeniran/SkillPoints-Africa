@@ -1,8 +1,27 @@
 # SkillPoints Africa 🚀
 
-SkillPoints Africa is an AI-powered, full-stack upskilling and resource-redemption platform designed to empower youth across the African tech startup ecosystem. By combining localized micro-learning modules with a gamified blockchain-inspired ledger system, the platform transforms educational milestones into real-world utility.
+SkillPoints Africa is an AI-powered, full-stack upskilling and resource-redemption platform designed to empower youth across the African tech startup ecosystem. By combining localized micro-learning modules with a gamified ledger system, the platform transforms educational milestones into real-world utility—directly eliminating the opportunity cost of education.
 
 Students complete high-demand digital skills tracks, submit practical contextual workflows, and earn SkillPoints (SP) redeemable for data vouchers, vendor rewards, or operational tools.
+
+---
+
+## 📺 MVP Video Walkthroughs & Demos
+
+Great execution speaks louder than pitch slides. Watch the functional prototype in action below, where I detail the backend code workflows, demonstrate the AI generation cockpit, and show how to run the system:
+
+* 🎥 **[Watch Part 1: SkillPoints Africa MVP Demo & Functional Overview](https://youtu.be/qOsSjAitHYI)**
+* 💻 **[Watch Part 2: Technical Deep Dive & Code Architecture Walkthrough](https://youtu.be/GKYU7YG2xOo)**
+
+---
+
+## 🚀 Join the Closed Beta & Community Pool
+
+We are actively onboarding early students, tech mentors, and local retail/vendor partners in Accra and across West Africa. Sign up to join our ecosystem:
+
+👉 **[SkillPoints Africa Community & Beta Registration Form](https://forms.gle/kstGyHw4G4aTTkTz5)**
+
+---
 
 ## ✨ Core Features
 
@@ -15,12 +34,16 @@ Students complete high-demand digital skills tracks, submit practical contextual
 * **AI-Powered Track Generation:** Utilizes the cutting-edge `google-genai` SDK to dynamically create localized educational modules on demand.
 * **Evaluation Loop:** Comprehensive tracking panel for administrators to review active text submissions, deliver structured feedback, and release milestone tokens.
 
+---
+
 ## 🛠️ Tech Stack & Architecture
 
 * **Backend Framework:** Django (Python 3.10+)
-* **Database:** SQLite (Development) / PostgreSQL (Production ready)
+* **Database Pipeline:** SQLite (Development) / PostgreSQL (Production ready)
 * **Frontend Architecture:** Clean HTML5 Semantics, Vanilla JavaScript ES6, and Modularized Native CSS Grid/Flexbox pipelines (`static/core/`)
 * **Third-Party Integrations:** Google GenAI SDK (`google-genai>=1.0.0`), FontAwesome v6 (Iconography)
+
+---
 
 ## 🚀 Local Installation & Deployment Pipeline
 
@@ -80,6 +103,8 @@ python manage.py runserver
 ```
 Open your preferred web browser and navigate to `http://127.0.0.1:8000/` to explore the student workspace. Access the management cockpit at `http://127.0.0.1:8000/admin/`.
 
+---
+
 ## 📂 Targeted File System Layout
 
 To ensure Django's template loaders and static engines register paths properly, the repository must match this clean modular structure:
@@ -127,6 +152,11 @@ SkillPoints-Africa/           # Git Repository Root Folder
 │   ├── urls.py
 │   └── views.py
 │
+├── api/                      # Planned Enterprise Integration Layer
+│   ├── serializers.py        # Handles JSON verification mapping
+│   ├── urls.py               # SaaS Webhook Portals (/api/v1/rewards/)
+│   └── views.py              # Cryptographic HMAC Endpoint Verification
+│
 ├── SkillPoint/               # Central Project Management & Routing Configurations Only
 │   ├── __init__.py
 │   ├── settings.py           # Master Project Configuration 
@@ -138,3 +168,11 @@ SkillPoints-Africa/           # Git Repository Root Folder
 ├── README.md                 # Documentation
 └── requirements.txt          # Frozen dependency manifest
 ```
+
+---
+
+## 💡 Engineering Roadmap
+
+* **Cloud Infrastructure Deployment:** Migrating settings to support production-ready PostgreSQL running on Vercel Serverless architectures.
+* **SaaS B2B University Integration Gateway:** Exposing protected API endpoints utilizing HMAC cryptographic secret keys, allowing external higher-education School Management Systems (SMS) to issue SkillPoints automatically based on internal portal achievements.
+* **Sybil Defense Layer:** Implementing behavioral biometric telemetry engines (typing acceleration, click arrays) within Django to protect the voucher liquidation pool from automated bot farming.
