@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "SkillPoint/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "SkillPoint/wsgi.py"
+    }
+  ]
+}

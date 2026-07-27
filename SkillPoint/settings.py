@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,12 +74,23 @@ USE_I18N = True
 USE_TZ = True
 
 # --- Static Files ---
-STATIC_URL = 'static/'
-# ADDED: Essential for loading your CSS/JS files
+STATIC_URL = '/static/'
+
+# Local static folder where your CSS/JS files live
 STATICFILES_DIRS = [BASE_DIR / 'static']
-# ADDED: Essential for 'python manage.py collectstatic' when you deploy
+
+# Folder where 'collectstatic' will output files for production on Vercel
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# WhiteNoise storage engine for serving static files efficiently on Vercel
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 # --- Redirects ---
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = '/?logout=success'
