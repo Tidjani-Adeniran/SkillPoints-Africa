@@ -1,10 +1,5 @@
 {
-  "builds": [
-    {
-      "src": "SkillPoint/wsgi.py",
-      "use": "@vercel/python"
-    }
-  ],
+  "framework": "django",
   "routes": [
     {
       "src": "/(.*)",
