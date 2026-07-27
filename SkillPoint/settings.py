@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-+j2p6l1fkl-6&qc%%4g33eue5e@x6x$v&v!ai88v=3=+o15$v!')
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'skillpoints.adenirantidjani.com','.vercel.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'skillpoints.adenirantidjani.com','skill-points-africa.vercel.app','.vercel.app']
 
 # --- Application definition ---
 INSTALLED_APPS = [
