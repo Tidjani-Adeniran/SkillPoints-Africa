@@ -14,11 +14,12 @@ Great execution speaks louder than pitch slides. Watch the functional prototype 
 * 💻 **[Watch Part 2: Technical Deep Dive & Code Architecture Walkthrough](https://youtu.be/GKYU7YG2xOo)**
 
 ---
+---
 ## 🌐 Live Application
 
-Experience the deployed MVP of SkillPoints Africa and explore the Learn-to-Earn platform in action.
+The SkillPoints Africa MVP is now live. Explore the platform here:
 
-👉 https://skill-points-africa.vercel.app/
+👉 **[SkillPoints Africa Live Platform](https://skill-points-africa.vercel.app/)**
 ---
 
 ## 🚀 Join the Closed Beta & Community Pool
