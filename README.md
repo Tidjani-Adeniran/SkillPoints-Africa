@@ -19,7 +19,8 @@ Great execution speaks louder than pitch slides. Watch the functional prototype 
 
 The SkillPoints Africa MVP is now live. Explore the platform here:
 
-👉 **[SkillPoints Africa Live Platform](https://skill-points-africa.vercel.app/)**
+👉 <u>[SkillPoints Africa Live Platform](https://skill-points-africa.vercel.app/)</u>
+
 ---
 
 ## 🚀 Join the Closed Beta & Community Pool
